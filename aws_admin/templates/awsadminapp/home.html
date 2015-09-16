@@ -1,0 +1,87 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static bootstrapped_goodies_tags %}
+{% load custom_filter %}{% load custom_tag %}
+{% block title %}Home | AWS Admin{% endblock %}
+{% block extrastyle %}{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<br/><br/>
+<div id="content-main">
+	<div class="row">
+		<!-- Online Users -->
+		<div class="col-lg-6 col-mg-6">
+			<div class="panel panel-green">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-xs-3">
+							<i class="fa fa-tasks fa-5x"></i>
+						</div>
+						<div class="col-xs-9 text-right">
+							<div class="huge">{{ num_user }}</div>
+							<div class="mid-huge">Online Users</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Running Intances -->
+		<div class="col-lg-6 col-mg-6">
+			<div class="panel panel-yellow">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-xs-3">
+							<i class="fa fa-tasks fa-5x"></i>
+						</div>
+						<div class="col-xs-9 text-right">
+							<div class="huge">{{ num_instance }}</div>
+							<div class="mid-huge">Running Instances</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Server Status
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-hover">
+                            <thead>
+                                <th>Server ID</th>
+                                <th>Server Name</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#id</td>
+                                    <td>name</td>
+                                    <td>running</td>
+                                    <td><button type="button" class="btn btn-outline btn-success btn-block">Start</button></td>
+                                    <td><button type="button" class="btn btn-outline btn-danger btn-block">Stop</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+					</div>
+				</div>
+			</div>
+			<!-- /.panel -->
+		</div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+{{ block.super }}
+<script></script>
+{% endblock %}
