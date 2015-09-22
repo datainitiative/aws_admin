@@ -9,6 +9,14 @@
 {% block content %}
 <br/><br/>
 <div id="content-main">
+	<div id="alert-startserver" class="alert alert-success alert-dismissable" style="display:none;">
+		Server instance has been launched.<br/>
+		Please allow 5 minutes for the inistance to finish initializing process.
+	</div>
+	<div id="alert-stopserver" class="alert alert-danger alert-dismissable" style="display:none;">
+		Server instance has been stopped.<br/>
+		Please log out before you leave this page.
+	</div>
 	<div class="row">
 		<div class="col-lg-6 col-mg-6">
 			<!-- Online Users -->
@@ -130,52 +138,12 @@
 			<!-- /.panel -->
 		</div>
     </div>
-
-	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">AWS Administration</h4>
-				</div>
-				<div class="modal-body">
-					Server instance has been launched.<br/>
-					Please allow 5 minutes for the inistance to finish initializing process.
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal-dialog -->
-	</div>	
-	<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">AWS Administration</h4>
-				</div>
-				<div class="modal-body">
-					Server instance has been stopped.<br/>
-					Please log out before you leave this page.
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal-dialog -->
-	</div>
 </div>
 {% endblock %}
 
 {% block bottomjs %}
 {{ block.super }}
 <script src="{% static 'jquery-11.1.1/jquery.min.js' %}"></script>
-<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'jquery.cookie/jquery.cookie.js' %}"></script>
 <script>
 	function startserver(instanceid){
@@ -202,7 +170,7 @@
 				if ($("#btn-stopserver-"+instance_id).hasClass("disabled")){
 					$("#btn-stopserver-"+instance_id).removeClass("btn-default").removeClass("disabled").addClass("btn-danger");
 				}
-				$("#myModal1").modal("show");
+				$('#alert-startserver').show();
 			},
 			error : function(xhr,errmsg,err) {
 				console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
@@ -232,7 +200,7 @@
 				if ($("#btn-startserver-"+instance_id).hasClass("disabled")){
 					$("#btn-startserver-"+instance_id).removeClass("disabled").removeClass("btn-default").addClass("btn-success");
 				}
-				$("#myModal2").modal("show");
+				$("#alert-stopserver").show();
 			},
 			error : function(xhr,errmsg,err) {
 				console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
