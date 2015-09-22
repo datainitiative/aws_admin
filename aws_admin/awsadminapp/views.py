@@ -20,7 +20,7 @@ import time,json
 from util import *
 
 # Import from app
-from aws_admin.settings import AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, INSTANCE_ID_LINUX, INSTNACE_ID_WINDOWS, ROOT_APP_URL
+from aws_admin.settings import AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, INSTNACE_ID_WINDOWS, ROOT_APP_URL
 from awsadminapp.forms import *
 from awsadminapp.models import *
 
