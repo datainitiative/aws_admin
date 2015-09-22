@@ -103,7 +103,7 @@ def home(request):
     for instance in aws_instances:
         all_instance.append({
             "id":instance.id,
-            "name":instance.tags[0]["Value"],
+            "name":instance.tags[0]["Value"] if instance.tags else "",
             "type":instance.instance_type,
             "launch_time":instance.launch_time,
             "status":instance.state["Name"]})
