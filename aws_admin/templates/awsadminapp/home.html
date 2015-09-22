@@ -10,65 +10,56 @@
 <br/><br/>
 <div id="content-main">
 	<div class="row">
-		<!-- Online Users -->
 		<div class="col-lg-6 col-mg-6">
-			<div class="panel panel-green">
+			<!-- Online Users -->
+			<div class="panel panel-success">
 				<div class="panel-heading">
 					<div class="row">
 						<div class="col-xs-3">
-							<i class="fa fa-tasks fa-5x"></i>
+							<i class="fa fa-users fa-5x"></i>
 						</div>
 						<div class="col-xs-9 text-right">
-							<div class="huge">{{ num_user }}</div>
+							<div class="huge"><span id="num_user">{{ num_user }}</span></div>
 							<div class="mid-huge">Online Users</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- Running Intances -->
-		<div class="col-lg-6 col-mg-6">
-			<div class="panel panel-yellow">
+			<!-- Running Intances -->
+			<div class="panel panel-info">
 				<div class="panel-heading">
 					<div class="row">
 						<div class="col-xs-3">
-							<i class="fa fa-tasks fa-5x"></i>
+							<i class="fa fa-server fa-5x"></i>
 						</div>
 						<div class="col-xs-9 text-right">
-							<div class="huge">{{ num_instance }}</div>
+							<div class="huge"><span id="num_insatnce">{{ num_instance }}</span></div>
 							<div class="mid-huge">Running Instances</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel panel-primary">
+		<div class="col-lg-6 col-mg-6">
+			<div class="panel panel-green">
 				<div class="panel-heading">
-					Server Status
+					<i class="fa fa-users fa-lg"></i> User List
 				</div>
 				<!-- /.panel-heading -->
 				<div class="panel-body">
 					<div class="table-responsive">
 						<table class="table table-hover">
                             <thead>
-                                <th>Server ID</th>
-                                <th>Server Name</th>
+                                <th>User</th>
                                 <th>Status</th>
-                                <th></th>
-                                <th></th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>#id</td>
-                                    <td>name</td>
-                                    <td>running</td>
-                                    <td><button type="button" class="btn btn-outline btn-success btn-block">Start</button></td>
-                                    <td><button type="button" class="btn btn-outline btn-danger btn-block">Stop</button></td>
-                                </tr>
+								{% for user in users%}
+									<tr>
+										<td>{{user.user.first_name}}</td>
+										<td>{% if user.is_online %}<span class="btn-success">&nbsp;Online&nbsp;</span>{% endif %}</td>
+									</tr>
+								{% endfor %}
                             </tbody>
                         </table>
 					</div>
@@ -76,12 +67,188 @@
 			</div>
 			<!-- /.panel -->
 		</div>
-  </div>
+	</div>
+	
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<i class="fa fa-server fa-lg"></i> Server Status
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-hover">
+                            <thead>
+                                <th>Server ID</th>
+								<th>Server Name</th>
+                                <th>Server Type</th>
+								<th>Launch Time</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+								{% for instance in instances %}
+									<tr>
+										<td>{{instance.id}}</td>
+										<td>{{instance.name}}</td>
+										<td>{{instance.type}}</td>
+										<td><span id="instance-launchtime-{{instance.id}}">{{instance.launch_time}}</span></td>
+										<td><span id="instance-status-{{instance.id}}">{{instance.status}}</span></td>
+										{% if instance.id != win_id %}
+											{% if user|has_group:"AWS Admin" %}
+												{% if instance.status == "running" %}
+													<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
+													<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver">Stop</button></td>
+												{% else %}
+													<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-success btn-block btn-startserver">Start</button></td>
+													<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-stopserver disabled">Stop</button></td>
+												{% endif %}
+											{% else %}
+												<td><span class="text-danger"><small>Admin Only</small></span></td>
+												<td><span class="text-danger"><small>Admin Only</small></span></td>
+											{% endif %}
+										{% else %}
+											{% if instance.status == "running" %}
+												<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
+												<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver">Stop</button></td>
+											{% else %}
+												<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-success btn-block btn-startserver">Start</button></td>
+												<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-stopserver disabled">Stop</button></td>
+											{% endif %}
+										{% endif %}
+									</tr>
+									<input id="url-startserver-{{instance.id}}" type="hidden" value="{% setting 'ROOT_APP_URL' %}/startserver/{{instance.id}}/"></input>
+									<input id="url-stopserver-{{instance.id}}" type="hidden" value="{% setting 'ROOT_APP_URL' %}/stopserver/{{instance.id}}/"></input>
+								{% endfor %}
+                            </tbody>
+                        </table>
+					</div>
+				</div>
+			</div>
+			<!-- /.panel -->
+		</div>
+    </div>
 
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">AWS Administration</h4>
+				</div>
+				<div class="modal-body">
+					Server instance has been launched.<br/>
+					Please allow 5 minutes for the inistance to finish initializing process.
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>	
+	<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">AWS Administration</h4>
+				</div>
+				<div class="modal-body">
+					Server instance has been stopped.<br/>
+					Please log out before you leave this page.
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
 </div>
 {% endblock %}
 
 {% block bottomjs %}
 {{ block.super }}
-<script></script>
+<script src="{% static 'jquery-11.1.1/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'jquery.cookie/jquery.cookie.js' %}"></script>
+<script>
+	function startserver(instanceid){
+		var csrftoken = $.cookie('csrftoken');
+		var url=$("#url-startserver-"+instanceid).val();
+		$.ajax({
+			url : url, // the endpoint
+			type : "POST", // http method
+			data : {
+				csrfmiddlewaretoken: csrftoken,
+			}, // data sent with the delete request
+			success : function(json) {
+				console.log("Server #",json.instance_id," started successfully");
+				var num_instance = json.num_instance;
+				$("#num_insatnce").html(num_instance);
+				var instance_id = json.instance_id;
+				var instance_status = json.instance_status;
+				$("#instance-status-"+instance_id).html(instance_status);
+				var instance_launchtime = json.instance_launchtime;
+				$("#instance-launchtime-"+instance_id).html(instance_launchtime);
+				if (!$("#btn-startserver-"+instance_id).hasClass("disabled")){
+					$("#btn-startserver-"+instance_id).removeClass("btn-success").addClass("btn-default").addClass("disabled");
+				}
+				if ($("#btn-stopserver-"+instance_id).hasClass("disabled")){
+					$("#btn-stopserver-"+instance_id).removeClass("btn-default").removeClass("disabled").addClass("btn-danger");
+				}
+				$("#myModal1").modal("show");
+			},
+			error : function(xhr,errmsg,err) {
+				console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+			}
+		});
+	}
+		
+	function stopserver(instanceid){
+		var csrftoken = $.cookie('csrftoken');
+		var url=$("#url-stopserver-"+instanceid).val();
+		$.ajax({
+			url : url, // the endpoint
+			type : "POST", // http method
+			data : {
+				csrfmiddlewaretoken: csrftoken,
+			}, // data sent with the delete request
+			success : function(json) {
+				console.log("Server #",json.instance_id," stopped successfully");
+				var num_instance = json.num_instance;
+				$("#num_insatnce").html(num_instance);
+				var instance_id = json.instance_id;
+				var instance_status = json.instance_status;
+				$("#instance-status-"+instance_id).html(instance_status);
+				if (!$("#btn-stopserver-"+instance_id).hasClass("disabled")){
+					$("#btn-stopserver-"+instance_id).removeClass("btn-danger").addClass("btn-default").addClass("disabled");
+				}
+				if ($("#btn-startserver-"+instance_id).hasClass("disabled")){
+					$("#btn-startserver-"+instance_id).removeClass("disabled").removeClass("btn-default").addClass("btn-success");
+				}
+				$("#myModal2").modal("show");
+			},
+			error : function(xhr,errmsg,err) {
+				console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+			}
+		});
+	}
+			
+	$(".btn-startserver").click(function(){
+		var instance_id = this.id.replace("btn-startserver-","");
+		$("#instance-status-"+instance_id).html("launching...");
+		startserver(instance_id);
+	});
+	$(".btn-stopserver").click(function(){
+		var instance_id = this.id.replace("btn-stopserver-","");
+		$("#instance-status-"+instance_id).html("shutting down...");
+		stopserver(instance_id);
+	});
+</script>
 {% endblock %}

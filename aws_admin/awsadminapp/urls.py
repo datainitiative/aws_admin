@@ -12,7 +12,10 @@ urlpatterns = patterns('awsadminapp.views',
 	
 	# Login,Logout,Register,User
 	url(r'^logout/$',logout,{'template_name': 'registration/logged_out.html'}),
-	url(r'^register/$','register'),
 	url(r'^user/profile/$','user_profile'),
 	url(r'^user/password/$','user_change_password'),
+	
+	# Start, Stop Server
+	url(r'^startserver/(?P<instance_id>.*)/$','start_server'),
+	url(r'^stopserver/(?P<instance_id>.*)/$','stop_server'),
 )

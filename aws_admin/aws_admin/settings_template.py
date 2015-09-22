@@ -66,11 +66,11 @@ WSGI_APPLICATION = 'aws_admin.wsgi.application'
 DATABASES = {
     'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'DB NAME',
-            'USER': 'DB USER',
-            'PASSWORD': 'DB PW',
-            'HOST': 'HOST',#'/opt/bitnami/postgresql' for aws
-            'PORT': 'PORT'    
+            'NAME': 'aws_admin',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'localhost',#'/opt/bitnami/postgresql' for aws
+            'PORT': '5432'    
     }
 }
 
@@ -79,7 +79,8 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Denver'
 
 USE_I18N = True
 
@@ -173,8 +174,7 @@ MESSAGE_TAGS = {
 }
 
 # AWS Credentials
-AWS_REGION = "AWS REGION" # US West (Oregon)
-AWS_ACCESS_KEY_ID = "AWS ACCESS KEY ID"
-AWS_SECRET_ACCESS_KEY = "AWS SECRET ACCESS KEY"
-INSTANCE_ID_LINUX = "ISTANCE ID"
-INSTNACE_ID_WINDOWS = "INSTANCE ID"
+AWS_REGION = "aws region" # US West (Oregon)
+AWS_ACCESS_KEY_ID = "aws access key id"
+AWS_SECRET_ACCESS_KEY = "aws secret access key"
+INSTNACE_ID_WINDOWS = "windows id"
