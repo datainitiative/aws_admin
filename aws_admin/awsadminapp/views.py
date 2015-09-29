@@ -116,9 +116,8 @@ def home(request):
 
     online_users = get_all_logged_in_users()
     for user in online_users:
-        my_user = MyUser.objects.get(user=user)
-        my_user.is_online = True
-        my_user.save()
+        user.is_online = True
+        user.save()
         
     num_user = len(online_users)
     
