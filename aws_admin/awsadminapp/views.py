@@ -152,11 +152,19 @@ def start_server(request,instance_id):
             instance = ec2.Instance(instance_id)
             instance.start()
             
-            instance_status = instance.state["Name"]
-            while instance_status != "running":
-                time.sleep(10)
-                instance.reload()
-                instance_status = instance.state["Name"]
+            client = ec2.meta.client
+            waiter = client.get_waiter("system_status_ok")
+            waiter.wait(
+                DryRun = False,
+                InstanceIds = [instance_id],                
+            )
+            waiter = client.get_waiter("instance_status_ok")
+            waiter.wait(
+                DryRun = False,
+                InstanceIds = [instance_id],
+            )
+
+            instance_status = instance.state["Name"]            
             instance_launchtime = instance.launch_time.strftime("%b. %d, %Y %I:%M %p")
             
             aws_running_instances = ec2.instances.filter(
