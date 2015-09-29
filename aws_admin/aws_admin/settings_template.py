@@ -102,7 +102,7 @@ STATIC_ROOT_URL = '/aws_admin'
 STATIC_URL = '%s/static/' % STATIC_ROOT_URL
 
 # Login URL
-LOGIN_URL = '/admin/login/' # use this for localhost
+LOGIN_URL = ROOT_APP_URL + '/admin/login/' # use this for localhost
 #LOGIN_URL = '/aws_admin/admin/login/'
 
 # Use Bootstrap3 for Django
