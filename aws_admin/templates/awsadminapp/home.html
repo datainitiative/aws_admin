@@ -113,6 +113,9 @@
 												{% if instance.status == "running" %}
 													<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
 													<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver">Stop</button></td>
+												{% elif instance.status == "terminated" %}
+													<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
+													<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver disabled">Stop</button></td>
 												{% else %}
 													<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-success btn-block btn-startserver">Start</button></td>
 													<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-stopserver disabled">Stop</button></td>
@@ -125,6 +128,9 @@
 											{% if instance.status == "running" %}
 												<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
 												<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver">Stop</button></td>
+											{% elif instance.status == "terminated" %}
+												<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
+												<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver disabled">Stop</button></td>
 											{% else %}
 												<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-success btn-block btn-startserver">Start</button></td>
 												<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-stopserver disabled">Stop</button></td>
