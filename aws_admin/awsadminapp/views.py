@@ -121,7 +121,7 @@ def home(request):
         
     num_user = len(online_users)
     
-    all_users = MyUser.objects.all()
+    all_users = MyUser.objects.all().order_by("is_online","user__first_name")
     for user in all_users:
         if user in online_users:
             user.is_online = True
