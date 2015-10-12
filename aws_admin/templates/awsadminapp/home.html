@@ -9,39 +9,31 @@
 {% block content %}
 <br/><br/>
 <div id="content-main">
-	<div id="alert-startserver" class="alert alert-success alert-dismissable" style="display:none;">
-		Server instance has been launched.<br/>
-		Please allow 5 minutes for the inistance to finish initializing process.
-	</div>
-	<div id="alert-stopserver" class="alert alert-danger alert-dismissable" style="display:none;">
-		Server instance has been stopped.<br/>
-		Please log out before you leave this page.
-	</div>
 	<div class="row">
 		<div class="col-lg-6 col-mg-6">
 			<!-- Online Users -->
-			<div class="panel panel-success">
+			<div class="panel panel-default">
 				<div class="panel-heading">
 					<div class="row">
 						<div class="col-xs-3">
 							<i class="fa fa-users fa-5x"></i>
 						</div>
 						<div class="col-xs-9 text-right">
-							<div class="huge"><span id="num_user">{{ num_user }}</span></div>
+							<div class="huge"><span id="num_user" class="hightlight">{{ num_user }}</span></div>
 							<div class="mid-huge">Online Users</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- Running Intances -->
-			<div class="panel panel-info">
+			<div class="panel panel-default">
 				<div class="panel-heading">
 					<div class="row">
 						<div class="col-xs-3">
 							<i class="fa fa-server fa-5x"></i>
 						</div>
 						<div class="col-xs-9 text-right">
-							<div class="huge"><span id="num_insatnce">{{ num_instance }}</span></div>
+							<div class="huge"><span id="num_insatnce" class="hightlight">{{ num_instance }}</span></div>
 							<div class="mid-huge">Running Instances</div>
 						</div>
 					</div>
@@ -49,9 +41,9 @@
 			</div>
 		</div>
 		<div class="col-lg-6 col-mg-6">
-			<div class="panel panel-green">
+			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fa fa-users fa-lg"></i> User List
+					<i class="fa fa-users fa-lg"></i> <strong>User List</strong>
 				</div>
 				<!-- /.panel-heading -->
 				<div class="panel-body">
@@ -78,8 +70,20 @@
 	</div>
 	
 	<div class="row">
+		<div id="alert-startserver" class="alert alert-success alert-dismissable" style="display:none;">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			Server instance has been launched and is ready to use now.
+		</div>
+		<div id="alert-stopserver" class="alert alert-danger alert-dismissable" style="display:none;">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			Server instance has been stopped.<br/>
+			Please log out before you leave this page.
+		</div>
+	</div>
+	
+	<div class="row">
 		<div class="col-lg-12">
-			<div class="panel panel-primary">
+			<div class="panel panel-yellow">
 				<div class="panel-heading">
 					<i class="fa fa-server fa-lg"></i> Server Status
 				</div>
@@ -109,6 +113,9 @@
 												{% if instance.status == "running" %}
 													<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
 													<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver">Stop</button></td>
+												{% elif instance.status == "terminated" %}
+													<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
+													<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver disabled">Stop</button></td>
 												{% else %}
 													<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-success btn-block btn-startserver">Start</button></td>
 													<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-stopserver disabled">Stop</button></td>
@@ -121,6 +128,9 @@
 											{% if instance.status == "running" %}
 												<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
 												<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver">Stop</button></td>
+											{% elif instance.status == "terminated" %}
+												<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-startserver disabled">Start</button></td>
+												<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-danger btn-block btn-stopserver disabled">Stop</button></td>
 											{% else %}
 												<td><button id="btn-startserver-{{instance.id}}" type="button" class="btn btn-outline btn-success btn-block btn-startserver">Start</button></td>
 												<td><button id="btn-stopserver-{{instance.id}}" type="button" class="btn btn-outline btn-default btn-block btn-stopserver disabled">Stop</button></td>
@@ -164,9 +174,6 @@
 				$("#instance-status-"+instance_id).html(instance_status);
 				var instance_launchtime = json.instance_launchtime;
 				$("#instance-launchtime-"+instance_id).html(instance_launchtime);
-				if (!$("#btn-startserver-"+instance_id).hasClass("disabled")){
-					$("#btn-startserver-"+instance_id).removeClass("btn-success").addClass("btn-default").addClass("disabled");
-				}
 				if ($("#btn-stopserver-"+instance_id).hasClass("disabled")){
 					$("#btn-stopserver-"+instance_id).removeClass("btn-default").removeClass("disabled").addClass("btn-danger");
 				}
@@ -194,9 +201,6 @@
 				var instance_id = json.instance_id;
 				var instance_status = json.instance_status;
 				$("#instance-status-"+instance_id).html(instance_status);
-				if (!$("#btn-stopserver-"+instance_id).hasClass("disabled")){
-					$("#btn-stopserver-"+instance_id).removeClass("btn-danger").addClass("btn-default").addClass("disabled");
-				}
 				if ($("#btn-startserver-"+instance_id).hasClass("disabled")){
 					$("#btn-startserver-"+instance_id).removeClass("disabled").removeClass("btn-default").addClass("btn-success");
 				}
@@ -210,12 +214,18 @@
 			
 	$(".btn-startserver").click(function(){
 		var instance_id = this.id.replace("btn-startserver-","");
-		$("#instance-status-"+instance_id).html("launching...");
+		$("#instance-status-"+instance_id).html('<i class="fa fa-refresh fa-spin"></i> launching...');
+		if (!$("#btn-startserver-"+instance_id).hasClass("disabled")){
+			$("#btn-startserver-"+instance_id).removeClass("btn-success").addClass("btn-default").addClass("disabled");
+		}
 		startserver(instance_id);
 	});
 	$(".btn-stopserver").click(function(){
 		var instance_id = this.id.replace("btn-stopserver-","");
-		$("#instance-status-"+instance_id).html("shutting down...");
+		$("#instance-status-"+instance_id).html('<i class="fa fa-refresh fa-spin"></i> shutting down...');
+		if (!$("#btn-stopserver-"+instance_id).hasClass("disabled")){
+			$("#btn-stopserver-"+instance_id).removeClass("btn-danger").addClass("btn-default").addClass("disabled");
+		}
 		stopserver(instance_id);
 	});
 </script>
