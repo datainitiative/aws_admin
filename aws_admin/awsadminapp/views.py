@@ -164,7 +164,8 @@ def start_server(request,instance_id):
             )
 
             instance_status = instance.state["Name"]            
-            instance_launchtime = instance.launch_time.strftime("%b. %d, %Y %I:%M %p")
+#            instance_launchtime = instance.launch_time.strftime("%b. %d, %Y %I:%M %p")
+            instance_launchtime = instance.launch_time
             
             aws_running_instances = ec2.instances.filter(
                 Filters=[{"Name":"instance-state-name","Values":["running"]}]
