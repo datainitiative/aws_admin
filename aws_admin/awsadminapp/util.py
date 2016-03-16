@@ -15,6 +15,7 @@ from dateutil import tz
 # Django on server didn't handle DST transition properly, 
 # using server's local time instead of what's specified in settings.py.
 # As a workaround, force timezone conversion to TIME_ZONE in settings.py
+from aws_admin.settings import TIME_ZONE
 LOCAL_TIME_ZONE = tz.gettz(TIME_ZONE)
 
 # ---------------
