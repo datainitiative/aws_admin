@@ -20,7 +20,7 @@ import time,json
 from util import *
 
 # Import from app
-from aws_admin.settings import AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, INSTNACE_ID_WINDOWS, ROOT_APP_URL
+from aws_admin.settings import AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, INSTNACE_ID_WINDOWS, ROOT_APP_URL, TIME_ZONE
 from awsadminapp.forms import *
 from awsadminapp.models import *
 
@@ -100,12 +100,21 @@ def home(request):
     
     all_instance = []
     
+    # Django on server didn't handle DST transition properly, 
+    # using server's local time instead of what's specified in settings.py.
+    # As a workaround, force timezone conversion to TIME_ZONE in settings.py
+    to_zone = tz.gettz(TIME_ZONE)
+    
     for instance in aws_instances:
+        local_timezone = tz.gettz(TIME_ZONE)
+        utc = instance.launch_time
+        local_time = utc.astimezone(local_timezone)
+        
         all_instance.append({
             "id":instance.id,
             "name":instance.tags[0]["Value"] if instance.tags else "",
             "type":instance.instance_type,
-            "launch_time":instance.launch_time,
+            "launch_time":local_time,
             "status":instance.state["Name"]})
     
     running_instances = []
