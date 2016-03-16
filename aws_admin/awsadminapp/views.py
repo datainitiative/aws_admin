@@ -100,15 +100,12 @@ def home(request):
     
     all_instance = []
     
-    # Django on server didn't handle DST transition properly, 
-    # using server's local time instead of what's specified in settings.py.
-    # As a workaround, force timezone conversion to TIME_ZONE in settings.py
-    to_zone = tz.gettz(TIME_ZONE)
-    
     for instance in aws_instances:
-        local_timezone = tz.gettz(TIME_ZONE)
+        # Django on server didn't handle DST transition properly, 
+        # using server's local time instead of what's specified in settings.py.
+        # As a workaround, force timezone conversion to TIME_ZONE in settings.py        
         utc = instance.launch_time
-        local_time = utc.astimezone(local_timezone)
+        local_time = utc.astimezone(LOCAL_TIME_ZONE)
         
         all_instance.append({
             "id":instance.id,
@@ -173,8 +170,10 @@ def start_server(request,instance_id):
             )
 
             instance_status = instance.state["Name"]            
-#            instance_launchtime = instance.launch_time.strftime("%b. %d, %Y %I:%M %p")
-            instance_launchtime = instance.launch_time
+            
+            utc = instance.launch_time
+            local_time = utc.astimezone(LOCAL_TIME_ZONE)            
+            instance_launchtime = local_time
             
             aws_running_instances = ec2.instances.filter(
                 Filters=[{"Name":"instance-state-name","Values":["running"]}]
