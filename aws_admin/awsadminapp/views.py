@@ -134,7 +134,7 @@ def home(request):
         else:
             user.is_online = False
         user.save()
-    all_users = all_users.order_by("user__first_name").order_by("-is_online")
+    all_users = all_users.order_by("-is_online","user__first_name")
     
     return {
         "num_user":num_user,
