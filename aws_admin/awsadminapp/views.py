@@ -128,13 +128,13 @@ def home(request):
     num_user = len(online_users)
     
     all_users = MyUser.objects.all()
-    current_users = []
     for user in all_users:
         if user in online_users:
             user.is_online = True
         else:
             user.is_online = False
-    all_users = all_users.order_by("-is_online").order_by("user__first_name")
+        user.save()
+    all_users = all_users.order_by("user__first_name").order_by("-is_online")
     
     return {
         "num_user":num_user,
