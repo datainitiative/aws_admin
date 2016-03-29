@@ -105,7 +105,7 @@ STATIC_URL = '%s/static/' % STATIC_ROOT_URL
 LOGIN_URL = ROOT_APP_URL + '/admin/login/' # use this for localhost
 #LOGIN_URL = '/aws_admin/admin/login/'
 
-# Session Expire 12 hours after inactivicy
+# Session Expire 12 hours after inactivity
 SESSION_COOKIE_AGE = 43200
 
 # Use Bootstrap3 for Django
