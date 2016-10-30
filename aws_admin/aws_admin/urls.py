@@ -10,5 +10,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     
     # AWS Admin App URLs
-    url(r'^%s/' %  ROOT_APP_URL.replace("/aws_admin/",""),include('awsadminapp.urls')),     
+    url(r'^%s/' %  ROOT_APP_URL.replace("/aws_admin/","").replace("/aws_admin","aws_admin"),include('awsadminapp.urls')),     
 )

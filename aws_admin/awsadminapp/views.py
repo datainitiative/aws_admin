@@ -101,11 +101,17 @@ def home(request):
     all_instance = []
     
     for instance in aws_instances:
+        # Django on server didn't handle DST transition properly, 
+        # using server's local time instead of what's specified in settings.py.
+        # As a workaround, force timezone conversion to TIME_ZONE in settings.py        
+        utc = instance.launch_time
+        local_time = utc.astimezone(LOCAL_TIME_ZONE)
+        
         all_instance.append({
             "id":instance.id,
             "name":instance.tags[0]["Value"] if instance.tags else "",
             "type":instance.instance_type,
-            "launch_time":instance.launch_time,
+            "launch_time":local_time.strftime("%b. %d, %Y, %I:%M %p"),
             "status":instance.state["Name"]})
     
     running_instances = []
@@ -121,12 +127,14 @@ def home(request):
         
     num_user = len(online_users)
     
-    all_users = MyUser.objects.all().order_by("is_online","user__first_name")
+    all_users = MyUser.objects.all()
     for user in all_users:
         if user in online_users:
             user.is_online = True
         else:
             user.is_online = False
+        user.save()
+    all_users = all_users.order_by("-is_online","user__first_name")
     
     return {
         "num_user":num_user,
@@ -164,8 +172,10 @@ def start_server(request,instance_id):
             )
 
             instance_status = instance.state["Name"]            
-#            instance_launchtime = instance.launch_time.strftime("%b. %d, %Y %I:%M %p")
-            instance_launchtime = instance.launch_time
+            
+            utc = instance.launch_time
+            local_time = utc.astimezone(LOCAL_TIME_ZONE)  #March 28, 2016, 10:07 p.m.          
+            instance_launchtime = local_time.strftime("%b. %d, %Y, %I:%M %p")
             
             aws_running_instances = ec2.instances.filter(
                 Filters=[{"Name":"instance-state-name","Values":["running"]}]
